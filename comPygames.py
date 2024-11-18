@@ -12,7 +12,7 @@ TAMANHO_CELULA = 60
 TAMANHO_GRADE = 9
 LARGURA = TAMANHO_CELULA * TAMANHO_GRADE
 ALTURA = TAMANHO_CELULA * TAMANHO_GRADE
-TELA = pygame.display.set_mode((LARGURA, ALTURA + 100))  # Espaço extra para mensagens
+TELA = pygame.display.set_mode((LARGURA, ALTURA + 100)) 
 pygame.display.set_caption("Sudoku")
 FONT_MEDIA = pygame.font.Font(None, 40)
 FONT_GRANDE = pygame.font.Font(None, 50)
@@ -21,7 +21,7 @@ PRETO = (0, 0, 0)
 VERMELHO = (255, 0, 0)
 CINZA = (200, 200, 200)
 
-# Funções para o ranking
+
 ARQUIVO_RANKING = "ranking_sudoku.csv"
 
 def salvar_ranking(nome, tempo):
@@ -67,7 +67,7 @@ def gerar_tabuleiro_inicial(preenchidos=40):
     tabuleiro = [[0 for _ in range(TAMANHO_GRADE)] for _ in range(TAMANHO_GRADE)]
 
     # Insere alguns números iniciais aleatórios antes de resolver o tabuleiro
-    for _ in range(10):  # Insere 10 números iniciais aleatórios
+    for _ in range(10): 
         row = random.randint(0, 8)
         col = random.randint(0, 8)
         num = random.randint(1, 9)
@@ -144,17 +144,25 @@ def desenhar_tabuleiro(tabuleiro, selecionada=None, chances=4, mensagem="", mens
 
 
 def jogar_sudoku():
-    """Inicia o jogo de Sudoku."""
-    nome = obter_nome_do_jogador()  # Jogador insere o nome no início
-    tabuleiro = gerar_tabuleiro_inicial(preenchidos=40)  # Nível mais fácil
+    nome = obter_nome_do_jogador()
+# Fácil: 62 quadrados preenchidos / 19 quadrados vazios
+
+# Médio: 53 quadrados preenchidos / 28 quadrados vazios
+
+# Difícil: 44 quadrados preenchidos / 37 quadrados vazios
+
+# Muito difícil: 35 quadrados preenchidos / 46 quadrados vazios
+
+# Extremamente difícil: 26 quadrados preenchidos / 55 quadrados vazios
+    tabuleiro = gerar_tabuleiro_inicial(preenchidos=40)  
     tabuleiro_resolvido = [linha[:] for linha in tabuleiro]
-    resolver_sudoku(tabuleiro_resolvido)  # Resolve o tabuleiro para obter a solução
-    selecionada = [0, 0]  # Começa na célula (0, 0)
-    chances = 4  # Número de chances de erro
+    resolver_sudoku(tabuleiro_resolvido)  
+    selecionada = [0, 0]  
+    chances = 4  
     rodando = True
     inicio = time.time()
     mensagem = ""
-    mensagem_inicio = None  # Guarda o horário em que a mensagem foi exibida
+    mensagem_inicio = None  
 
     while rodando:
         desenhar_tabuleiro(tabuleiro, tuple(selecionada), chances, mensagem, mensagem_inicio)
@@ -164,23 +172,23 @@ def jogar_sudoku():
                 rodando = False
 
             elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:  # Sai do jogo
+                if evento.key == pygame.K_ESCAPE:  
                     rodando = False
-                elif evento.key == pygame.K_UP:  # Move para cima
+                elif evento.key == pygame.K_UP:  
                     selecionada[0] = (selecionada[0] - 1) % TAMANHO_GRADE
-                elif evento.key == pygame.K_DOWN:  # Move para baixo
+                elif evento.key == pygame.K_DOWN:  
                     selecionada[0] = (selecionada[0] + 1) % TAMANHO_GRADE
-                elif evento.key == pygame.K_LEFT:  # Move para a esquerda
+                elif evento.key == pygame.K_LEFT:  
                     selecionada[1] = (selecionada[1] - 1) % TAMANHO_GRADE
-                elif evento.key == pygame.K_RIGHT:  # Move para a direita
+                elif evento.key == pygame.K_RIGHT: 
                     selecionada[1] = (selecionada[1] + 1) % TAMANHO_GRADE
-                elif pygame.K_1 <= evento.key <= pygame.K_9:  # Insere números
+                elif pygame.K_1 <= evento.key <= pygame.K_9:  
                     i, j = selecionada
                     num = evento.key - pygame.K_0
                     if tabuleiro_resolvido[i][j] == num:  # Verifica se o número está correto
                         tabuleiro[i][j] = num
                         mensagem = "Acertou!"
-                        mensagem_inicio = time.time()  # Define o tempo de início da mensagem
+                        mensagem_inicio = time.time()  
                         # Verifica se o jogador ganhou
                         if all(
                             tabuleiro[row][col] == tabuleiro_resolvido[row][col]
@@ -207,7 +215,6 @@ def jogar_sudoku():
                             rodando = False
 
 
-    # Exibe uma tela inicial para o jogador inserir o nome.
 def obter_nome_do_jogador():
     rodando = True
     nome = ""
@@ -234,7 +241,7 @@ def obter_nome_do_jogador():
                     nome += evento.unicode
     return nome
 
-    # Carrega o ranking do arquivo CSV.
+    # Carrega ranking
 def carregar_ranking():
     if not os.path.exists(ARQUIVO_RANKING):
         return ["Nenhum ranking disponível."]
@@ -246,7 +253,7 @@ def carregar_ranking():
             ranking = sorted(ranking[1:], key=lambda x: float(x[1]))
         return [f"{i+1}. {linha[0]} - {linha[1]} segundos" for i, linha in enumerate(ranking)]
 
-    # Exibe o ranking do jogo na tela.
+    # Mostra ranking
 def mostrar_ranking():
     ranking = carregar_ranking()
     rodando = True
@@ -270,7 +277,7 @@ def mostrar_ranking():
                 if evento.key == pygame.K_ESCAPE:
                     rodando = False
 
-# Menu principal gráfico
+# Menu principal
 def menu():
     rodando = True
     while rodando:
@@ -289,11 +296,11 @@ def menu():
             if evento.type == pygame.QUIT:
                 rodando = False
             elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_1:  # Inicia o jogo
+                if evento.key == pygame.K_1: 
                     jogar_sudoku()
-                elif evento.key == pygame.K_2:  # Exibe o ranking
+                elif evento.key == pygame.K_2:  
                     mostrar_ranking()
-                elif evento.key == pygame.K_3:  # Sai do jogo
+                elif evento.key == pygame.K_3: 
                     rodando = False
 
     pygame.quit()

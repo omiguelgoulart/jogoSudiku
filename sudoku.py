@@ -3,12 +3,20 @@ import time
 import csv
 import os
 
-def gerar_tabuleiro_inicial(preenchidos=25):
-    """Gera um tabuleiro de Sudoku com números aleatórios."""
+# Fácil: 62 quadrados preenchidos / 19 quadrados vazios
+
+# Médio: 53 quadrados preenchidos / 28 quadrados vazios
+
+# Difícil: 44 quadrados preenchidos / 37 quadrados vazios
+
+# Muito difícil: 35 quadrados preenchidos / 46 quadrados vazios
+
+# Extremamente difícil: 26 quadrados preenchidos / 55 quadrados vazios
+def gerar_tabuleiro_inicial(preenchidos=40):
     tabuleiro = [[0 for _ in range(9)] for _ in range(9)]
 
+        # Verifica se o número pode ser inserido na posição especificada.
     def is_valid(board, row, col, num):
-        """Verifica se o número pode ser inserido na posição especificada."""
         if num in board[row]:  # Linha
             return False
         if num in [board[i][col] for i in range(9)]:  # Coluna
@@ -32,7 +40,6 @@ def gerar_tabuleiro_inicial(preenchidos=25):
     return tabuleiro
 
 def print_sudoku(board):
-    """Exibe o tabuleiro do Sudoku no console com emojis."""
     for row in board:
         linha_formatada = ""
         for cell in row:
@@ -44,7 +51,6 @@ def print_sudoku(board):
     print()
 
 def is_valid(board, row, col, num):
-    """Verifica se o número pode ser inserido na posição especificada."""
     if num in board[row]:  # Linha
         return False
     if num in [board[i][col] for i in range(9)]:  # Coluna
@@ -57,7 +63,6 @@ def is_valid(board, row, col, num):
     return True
 
 def solve_sudoku(board):
-    """Resolve o Sudoku utilizando backtracking."""
     for row in range(9):
         for col in range(9):
             if board[row][col] == 0:  # Encontrar célula vazia
@@ -71,17 +76,16 @@ def solve_sudoku(board):
     return True
 
 def salvar_ranking_csv(nome, tempo):
-    """Salva o tempo do jogador no arquivo de ranking CSV."""
-    arquivo_csv = "ranking.csv"
+    arquivo_csv = "ranking_sudoku.csv"
     existe = os.path.exists(arquivo_csv)
     with open(arquivo_csv, mode="a", newline="") as arquivo:
         escritor = csv.writer(arquivo)
-        if not existe:  # Adicionar cabeçalho se o arquivo é novo
+        # Adicionar cabeçalho se o arquivo é novo
+        if not existe:  
             escritor.writerow(["Nome", "Tempo (segundos)"])
         escritor.writerow([nome, f"{tempo:.2f}"])
 
 def exibir_ranking_csv():
-    """Exibe o ranking dos jogadores a partir do arquivo CSV."""
     arquivo_csv = "ranking.csv"
     if not os.path.exists(arquivo_csv):
         print("\nNenhum ranking disponível.")
@@ -97,7 +101,6 @@ def exibir_ranking_csv():
             print(f"{i}. {nome} - {tempo} segundos")
 
 def jogar_sudoku():
-    """Inicia o jogo de Sudoku."""
     tabuleiro = gerar_tabuleiro_inicial(preenchidos=25)
     print("\nTabuleiro inicial:")
     print_sudoku(tabuleiro)
@@ -116,7 +119,7 @@ def jogar_sudoku():
         print("Não foi possível resolver o Sudoku.")
 
 def menu():
-    """Menu principal do jogo."""
+    
     while True:
         print("\n=== Menu Principal ===")
         print("1. Jogar Sudoku")
